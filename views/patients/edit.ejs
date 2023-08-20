@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Edit Patient</title>
+</head>
+<body>
+    <h1>Edit Patient</h1>
+    <form action="/patients/<%=patient._id%>?_method=PUT" method="POST">
+        <div>
+            <label for="name">Name</label>
+            <input type="text" id="name" name="patient[name]" value="<%=patient.name%>">
+        </div>
+        <div>
+            <label for="gender">Gender</label>
+            <input type="text" id="name" name="patient[gender]" value="<%=patient.gender%>">
+        </div>
+        <div>
+            <label for="age">Age</label>
+            <input type="number" id="age" name="patient[age]" value="<%=patient.age%>">
+        </div>
+    </form>
+</body>
+</html>
