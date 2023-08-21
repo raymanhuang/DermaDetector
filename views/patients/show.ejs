@@ -10,16 +10,29 @@
 <body>
     <h1><%= patient.name %></h1>
     <h2><%= patient.age %>, <%= patient.gender %></h2>
+    <h2>Diagnosis History</h2>
+    <ul>
+        <%  for(let record of patient.diagnosisHistory) { %>
+                <li>
+                    <img src="<%= record.image %>" alt="Diagnosis Image" width="100">
+                    <p>Prediction: <%=record.prediction%></p>
+                </li>
+        <% } %>
+    </ul>
+    <form action="/patients/<%= patient._id %>/diagnose" method="POST" enctype="multipart/form-data">
+        <input type="file" name="image" id="" required>
+        <button type="submit">Upload for Diagnosis</button>
+    </form>
     <p>
-        <a href="/campgrounds/<%=campground._id%>/edit">Edit</a>
+        <a href="/patients/<%=patient._id%>/edit">Edit</a>
     </p>
     <p>
-    <form action="/campgrounds/<%=campground._id%>_method=DELETE" method="POST">
+    <form action="/patients/<%=patient._id%>_method=DELETE" method="POST">
         <button>Delete</button>
     </form>
     </p>
     <footer>
-        <a href="/campgrounds">All Campgrounds</a>
+        <a href="/patients">All Patients</a>
     </footer>
 
 </body>
