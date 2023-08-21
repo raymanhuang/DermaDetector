@@ -1,0 +1,18 @@
+# Node specific
+node_modules/
+npm-debug.log
+
+# Python specific
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+*.egg
+*.venv/
+
+# IDEs and editors
+.idea/
+.vscode/
+*.swp
+*.swo
+*.swn
