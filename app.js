@@ -3,7 +3,9 @@ const path = require('path')
 const mongoose = require('mongoose')
 const methodOverride = require('method-override');
 const Patient = require('./models/patient');
-
+const axios = require('axios');
+const fs = require('fs');
+const FormData = require('form-data')
 main().catch(err => console.log(err))
 async function main() {
     await mongoose.connect('mongodb://127.0.0.1:27017/skin-diseases');
@@ -17,7 +19,7 @@ const storage = multer.diskStorage({
         cb(null, './uploads/');
     },
     filename: function(req, file, cb){
-        cb(null, Data.now() + '-' + file.originalname);
+        cb(null, Date.now() + '-' + file.originalname);
     }
 });
 
@@ -76,9 +78,14 @@ app.post('/patients/:id/diagnose', upload.single('image'), async (req, res) => {
     const { id } = req.params;
     const imagePath = req.file.path;
 
+    const form_data = new FormData();
+    form_data.append('image', fs.createReadStream(imagePath))
+
     try {
-        const response = await axios.post('http://127.0.0.1:5000/predict', {
-            image: imagePath
+        const response = await axios.post('http://127.0.0.1:5000/predict', form_data, {
+            headers: {
+                ...form_data.getHeaders()
+            }
         });
         const prediction = response.data.prediction;
 
