@@ -57,8 +57,10 @@ app.get('/patients/new', (req, res) => {
 app.post('/patients', upload.single('patient[image]'), async (req, res) => {
     try {
         const patientData = req.body.patient;
-        if (req.file){
-            patientData.image = req.file.path
+        if (req.file) {
+            patientData.image = req.file.path;
+        } else if (!patientData.image) {
+            patientData.image = '/images/defaultpfp.png';
         }
         const patient = new Patient(patientData);
         await patient.save();
