@@ -1,21 +1,37 @@
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Patients</title>
-</head>
-<body>
+<%- layout('layouts/boilerplate') %>
+
     <h1>All Patients</h1>
     <div>
         <a href="/patients/new">Add Patient</a>
     </div>
-    <ul>
-        <% for (let patient of patients){ %>
-        <li><a href="/patients/<%=patient._id %>"><%= patient.name %></a></li>
-        <%}%>
-    </ul>
-</body>
-</html>
+    <% for (let patient of patients) {%>
+    <div class="card" >
+        <div class="row">
+            <div class="col-md-2">
+                <% if (patient.image.includes('\\')) { %>
+                    <img src="/<%= patient.image.replace(/\\/g, '/') %>" alt="">
+                <% } else { %>
+                    <img src="<%= patient.image %>" alt="">
+                <% } %>
+
+            </div>
+            <div class="col-md-4">
+                <div class="card-body">
+                    <h5 class="card-title"><%= patient.name %></h5>
+                    <p class="card-text">
+                        <%=patient.age%>, <%=patient.gender%>
+                    </p>
+                    <a class="btn btn-primary" href="/patients/<%=patient._id%>">View <%=patient.name%></a>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card-body">
+                    <h5 class="card-title">Extra Notes:</h5>
+                    <p class="card-text">
+                        <%=patient.extra_notes%>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <%}%>

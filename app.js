@@ -6,6 +6,7 @@ const Patient = require('./models/patient');
 const axios = require('axios');
 const fs = require('fs');
 const FormData = require('form-data')
+const ejsMate = require('ejs-mate')
 main().catch(err => console.log(err))
 async function main() {
     await mongoose.connect('mongodb://127.0.0.1:27017/skin-diseases');
@@ -27,11 +28,15 @@ const upload = multer({storage: storage});
 
 const app = express()
 
+app.engine('ejs', ejsMate)
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'))
 
+app.use('/uploads', express.static('uploads'));
+app.use(express.static('public'));
 app.use(express.urlencoded({extended: true}));
 app.use(methodOverride('_method'));
+
 
 app.get('/', (req, res) => {
     res.render('home')
@@ -39,6 +44,9 @@ app.get('/', (req, res) => {
 
 app.get('/patients', async (req, res) => {
     const patients = await Patient.find({})
+    patients.forEach(patient => {
+        console.log(patient.image)
+    })
     res.render('patients/index', { patients })
 });
 
@@ -46,10 +54,19 @@ app.get('/patients/new', (req, res) => {
     res.render('patients/new');
 })
 
-app.post('/patients', async (req, res) => {
-    const patient = new Patient(req.body.patient)
-    await patient.save();
-    res.redirect(`/patients/${patient._id}`)
+app.post('/patients', upload.single('patient[image]'), async (req, res) => {
+    try {
+        const patientData = req.body.patient;
+        if (req.file){
+            patientData.image = req.file.path
+        }
+        const patient = new Patient(patientData);
+        await patient.save();
+        res.redirect(`/patients/${patient._id}`);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("Error adding patient")
+    }
 })
 
 app.get('/patients/:id', async(req, res) => {

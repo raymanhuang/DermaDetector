@@ -1,39 +1,89 @@
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Show</title>
-</head>
-<body>
-    <h1><%= patient.name %></h1>
-    <h2><%= patient.age %>, <%= patient.gender %></h2>
-    <h2>Diagnosis History</h2>
-    <ul>
-        <%  for(let record of patient.diagnosisHistory) { %>
+<!--<!doctype html>-->
+<!--<html lang="en">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <meta name="viewport"-->
+<!--          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">-->
+<!--    <meta http-equiv="X-UA-Compatible" content="ie=edge">-->
+<!--    <title>Show</title>-->
+<!--</head>-->
+<!--<body>-->
+<!--    <h1><%= patient.name %></h1>-->
+<!--&lt;!&ndash;    <h2><%= patient.age %>, <%= patient.gender %></h2>&ndash;&gt;-->
+<!--    <% if (patient.image.includes('\\')) { %>-->
+<!--        <img src="/<%= patient.image.replace(/\\/g, '/') %>" alt="">-->
+<!--    <% } else { %>-->
+<!--        <img src="<%= patient.image %>" alt="">-->
+<!--    <% } %>-->
+<!--    <h2>Diagnosis History</h2>-->
+<!--    <ul>-->
+<!--        <%  for(let record of patient.diagnosisHistory) { %>-->
+<!--                <li>-->
+<!--                    <img src="/<%= record.image.replace(/\\/g, '/') %>" alt="Diagnosis Image" width="100">-->
+<!--                    <p>Prediction: <%=record.prediction%></p>-->
+<!--                    <p><%=record.image%></p>-->
+<!--                </li>-->
+<!--        <% } %>-->
+<!--    </ul>-->
+<!--    <form action="/patients/<%= patient._id %>/diagnose" method="POST" enctype="multipart/form-data">-->
+<!--        <input type="file" name="image" id="" required>-->
+<!--        <button type="submit">Upload for Diagnosis</button>-->
+<!--    </form>-->
+<!--    <p>-->
+<!--        <a href="/patients/<%=patient._id%>/edit">Edit</a>-->
+<!--    </p>-->
+<!--    <p>-->
+<!--    <form action="/patients/<%=patient._id%>_method=DELETE" method="POST">-->
+<!--        <button>Delete</button>-->
+<!--    </form>-->
+<!--    </p>-->
+<!--    <footer>-->
+<!--        <a href="/patients">All Patients</a>-->
+<!--    </footer>-->
+
+<!--</body>-->
+<!--</html>-->
+
+<%layout('layouts/boilerplate')%>
+<div class="row">
+    <div class="col-6 offset-3">
+        <div class="card mb-3">
+            <% if (patient.image.includes('\\')) { %>
+                <img class="m-3" style="width: 100px; height: 100px; object-fit: cover; border-radius: 50%;" src="/<%= patient.image.replace(/\\/g, '/') %>" alt="">
+            <% } else { %>
+                <img style="width: 100px; height: 100px; object-fit: cover; border-radius: 50%;" src="<%= patient.image %>" alt="">
+            <% } %>
+            <div class="card-body">
+                <h2 class="card-title"><%=patient.name%></h2>
+                <p class="card-text"><%=patient.age%>, <%=patient.gender%></p>
+            </div>
+            <div class="card-body">
+                <h2 class="card-title">Diagnosis History</h2>
+                <%  for(let record of patient.diagnosisHistory) { %>
                 <li>
-                    <img src="<%= record.image %>" alt="Diagnosis Image" width="100">
+                    <img src="/<%= record.image.replace(/\\/g, '/') %>" alt="Diagnosis Image" width="100">
                     <p>Prediction: <%=record.prediction%></p>
                 </li>
-        <% } %>
-    </ul>
-    <form action="/patients/<%= patient._id %>/diagnose" method="POST" enctype="multipart/form-data">
-        <input type="file" name="image" id="" required>
-        <button type="submit">Upload for Diagnosis</button>
-    </form>
-    <p>
-        <a href="/patients/<%=patient._id%>/edit">Edit</a>
-    </p>
-    <p>
-    <form action="/patients/<%=patient._id%>_method=DELETE" method="POST">
-        <button>Delete</button>
-    </form>
-    </p>
-    <footer>
-        <a href="/patients">All Patients</a>
-    </footer>
+                <% } %>
+            </div>
+                <div class="m-3">
+                    <form action="/patients/<%= patient._id %>/diagnose" method="POST" enctype="multipart/form-data">
+                        <input type="file" name="image" id="" required>
+                        <button class="btn btn-success" type="submit">Upload for Diagnosis</button>
+                    </form>
+                </div>
+            <div class="card-body">
+                <h4 class="card-title">Extra Notes:</h4>
+                <p class="card-text"><%=patient.extra_notes%></p>
+            </div>
 
-</body>
-</html>
+                <div class="card-body">
+                    <a class="card-link btn btn-info" href="/patients/<%=patient._id%>/edit">Edit</a>
+                    <form class="d-inline" action="/patients/<%=patient._id%>?_method=DELETE" method="POST">
+                        <button class="btn btn-danger">Delete</button>
+                    </form>
+                </div>
+
+        </div>
+    </div>
+</div>
