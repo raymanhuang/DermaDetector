@@ -36,22 +36,34 @@
 <div class="row">
     <h1 class="text-center">Edit Patient</h1>
     <div class="col-6 offset-3">
-        <form action="/patients/<%=patient._id%>?_method=PUT" method="POST">
+        <form action="/patients/<%=patient._id%>?_method=PUT" method="POST" novalidate class="validated-form">
             <div class="mb-3">
                 <label class="form-label" for="name">Name</label>
-                <input class="form-control" type="text" id="name" name="patient[name]" value="<%=patient.name%>">
+                <input class="form-control" type="text" id="name" name="patient[name]" value="<%=patient.name%>" required>
+                <div class="valid-feedback">
+                    Looks good!
+                </div>
             </div>
             <div class="mb-3">
                 <label class="form-label" for="gender">Gender</label>
-                <input class="form-control" type="text" id="name" name="patient[gender]" value="<%=patient.gender%>">
+                <input class="form-control" type="text" id="name" name="patient[gender]" value="<%=patient.gender%>" required>
+                <div class="valid-feedback">
+                    Looks good!
+                </div>
             </div>
             <div class="mb-3">
                 <label class="form-label" for="age">Age</label>
-                <input class="form-control" type="number" id="age" name="patient[age]" value="<%=patient.age%>">
+                <input class="form-control" type="number" id="age" name="patient[age]" value="<%=patient.age%>" required>
+                <div class="valid-feedback">
+                    Looks good!
+                </div>
             </div>
             <div class="mb-3">
                 <label class="form-label" for="extra_notes">Extra Notes</label>
                 <textarea class="form-control" type="text" id="extra_notes" name="patient[extra_notes]" value="<%=patient.extra_notes%>"></textarea>
+                <div class="valid-feedback">
+                    Looks good!
+                </div>
             </div>
                     <div>
                         <label for="image">Profile Picture (optional)</label>

@@ -7,8 +7,8 @@ const PatientSchema = new mongoose.Schema({
         type: String,
         default: '/images/defaultpfp.png'
     },
-    age: Number,
-    gender: String,
+    age: { type: Number, required: true },
+    gender: { type: String, required: true },
     diagnosisHistory: [{
         image: { type: String },
         prediction: {type: String}

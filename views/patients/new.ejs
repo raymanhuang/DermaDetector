@@ -34,26 +34,41 @@
 <div class="row">
     <h1 class="text-center">New Patient</h1>
     <div class="col-6 offset-3">
-        <form action="/patients" method="POST">
+        <form action="/patients" method="POST" novalidate class="validated-form">
             <div class="mb-3">
                 <label class="form-label" for="name">Name</label>
-                <input class="form-control" type="text" name="patient[name]" id="name">
+                <input class="form-control" type="text" name="patient[name]" id="name" required>
+                <div class="valid-feedback">
+                    Looks good!
+                </div>
             </div>
             <div class="mb-3">
                 <label class="form-label" for="age">Age</label>
-                <input class="form-control" type="number" name="patient[age]" id="age">
+                <input class="form-control" type="number" name="patient[age]" id="age" required>
+                <div class="valid-feedback">
+                    Looks good!
+                </div>
             </div>
             <div class="mb-3">
                 <label class="form-label" for="gender">Gender</label>
-                <input class="form-control" type="text" name="patient[gender]" id="gender">
+                <input class="form-control" type="text" name="patient[gender]" id="gender" required>
+                <div class="valid-feedback">
+                    Looks good!
+                </div>
             </div>
             <div class="mb-3">
                 <label for="image">Profile Picture (optional)</label>
                 <input type="file" id="image" name="patient[image]">
+                <div class="valid-feedback">
+                    Looks good!
+                </div>
             </div>
             <div class="mb-3">
                 <label class="form-label" for="extra_notes">Extra Notes</label>
                 <textarea class="form-control" type="text" id="extra_notes" name="patient[extra_notes]"></textarea>
+                <div class="valid-feedback">
+                    Looks good!
+                </div>
             </div>
             <div class="mb-3">
                 <button class="btn btn-success">Add Patient</button>
