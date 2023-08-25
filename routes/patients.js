@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const catchAsync = require('../utils/catchAsync')
 const { patientSchema } = require('../schemas');
-
+const { isLoggedIn } = require('../middleware')
 
 const ExpressError = require('../utils/ExpressError')
 const Campground = require('../models/patient')
@@ -40,11 +40,11 @@ router.get('/', catchAsync (async(req, res) => {
     res.render('patients/index', { patients })
 }));
 
-router.get('/new', (req, res) => {
+router.get('/new', isLoggedIn, (req, res) => {
     res.render('patients/new');
 });
 
-router.post('/', upload.single('patient[image]'), validatePatient, catchAsync(async (req, res) => {
+router.post('/', isLoggedIn, upload.single('patient[image]'), validatePatient, catchAsync(async (req, res) => {
     try {
         const patientData = req.body.patient;
         if (req.file) {
@@ -71,7 +71,7 @@ router.get('/:id', catchAsync(async (req, res) => {
     res.render('patients/show', { patient });
 }));
 
-router.get('/:id/edit', catchAsync(async (req, res) => {
+router.get('/:id/edit', isLoggedIn, catchAsync(async (req, res) => {
     const patient = await Patient.findById(req.params.id)
     if(!patient){
         req.flash('error', 'Cannot find patient!');
@@ -80,21 +80,21 @@ router.get('/:id/edit', catchAsync(async (req, res) => {
     res.render('patients/edit', {patient});
 }));
 
-router.put('/:id', validatePatient, catchAsync(async (req, res) => {
+router.put('/:id', isLoggedIn, validatePatient, catchAsync(async (req, res) => {
     const { id } = req.params;
     const patient = await Patient.findByIdAndUpdate(id, { ...req.body.patient });
     req.flash('success', 'Successfully updated patient!');
     res.redirect(`/patients/${patient._id}`)
 }));
 
-router.delete('/:id', catchAsync(async (req, res) => {
+router.delete('/:id', isLoggedIn, catchAsync(async (req, res) => {
     const { id } = req.params;
     await Patient.findByIdAndDelete(id);
     req.flash('success', 'Successfully deleted patient!');
     res.redirect('/patients');
 }));
 
-router.post('/:id/diagnose', upload.single('image'), catchAsync(async (req, res) => {
+router.post('/:id/diagnose', isLoggedIn, upload.single('image'), catchAsync(async (req, res) => {
     const { id } = req.params;
     const imagePath = req.file.path;
 
