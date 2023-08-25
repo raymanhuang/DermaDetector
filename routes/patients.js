@@ -7,7 +7,7 @@ const { patientSchema } = require('../schemas');
 const ExpressError = require('../utils/ExpressError')
 const Campground = require('../models/patient')
 const validatePatient = (req, res, next) => {
-    console.log("Request Body:", req.body)
+    // console.log("Request Body:", req.body)
     const { error } = patientSchema.validate(req.body);
     if (error) {
         console.log("Validation error details:", error.details)
