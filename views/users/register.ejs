@@ -1,6 +1,6 @@
 <% layout('layouts/boilerplate')%>
 <h1>Register</h1>
-<form action="/register" method="POST" class="validated-form" novalidate>
+<form action="/users/register" method="POST" class="validated-form" novalidate>
     <div class="mb-3">
         <label class="form-label" for="username">Username</label>
         <input class="form-control" type="text" id="username" name="username" required>
@@ -23,4 +23,5 @@
         </div>
     </div>
     <button class="btn btn-success">Register</button>
+    <button class="btn btn-warning">Login</button>
 </form>

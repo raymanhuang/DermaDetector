@@ -13,7 +13,11 @@ const PatientSchema = new mongoose.Schema({
         image: { type: String },
         prediction: {type: String}
     }],
-    extra_notes: String
+    extra_notes: String,
+    user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+    }
 });
 
 module.exports = mongoose.model('Patient', PatientSchema)

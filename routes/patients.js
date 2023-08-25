@@ -36,7 +36,7 @@ const storage = multer.diskStorage({
 const upload = multer({storage: storage});
 
 router.get('/', catchAsync (async(req, res) => {
-    const patients = await Patient.find({})
+    const patients = await Patient.find({user: req.user_id})
     res.render('patients/index', { patients })
 }));
 
@@ -64,7 +64,7 @@ router.post('/', isLoggedIn, upload.single('patient[image]'), validatePatient, c
 
 router.get('/:id', catchAsync(async (req, res) => {
     const patient = await Patient.findById(req.params.id)
-    if(!patient){
+    if(!patient || patient.user.toString() !== req.user._id.toString()){
         req.flash('error', 'Cannot find patient!');
         return res.redirect('/patients')
     }
@@ -77,11 +77,26 @@ router.get('/:id/edit', isLoggedIn, catchAsync(async (req, res) => {
         req.flash('error', 'Cannot find patient!');
         return res.redirect('/patients')
     }
+    if(patient.user.toString() !== req.user._id.toString()) {
+        req.flash('error', 'You do not have permission to edit this patient!');
+        return res.redirect(`/patients/${patient._id}`);
+    }
     res.render('patients/edit', {patient});
 }));
 
 router.put('/:id', isLoggedIn, validatePatient, catchAsync(async (req, res) => {
     const { id } = req.params;
+    // Check if the patient exists
+    if (!patient) {
+        req.flash('error', 'Cannot find patient!');
+        return res.redirect('/patients');
+    }
+
+    // Check if the logged-in user is the same as the patient's owner
+    if (patient.user.toString() !== req.user._id.toString()) {
+        req.flash('error', 'You do not have permission to update this patient!');
+        return res.redirect(`/patients/${patient._id}`);
+    }
     const patient = await Patient.findByIdAndUpdate(id, { ...req.body.patient });
     req.flash('success', 'Successfully updated patient!');
     res.redirect(`/patients/${patient._id}`)
@@ -90,6 +105,19 @@ router.put('/:id', isLoggedIn, validatePatient, catchAsync(async (req, res) => {
 router.delete('/:id', isLoggedIn, catchAsync(async (req, res) => {
     const { id } = req.params;
     await Patient.findByIdAndDelete(id);
+
+    // Check if the patient exists
+    if (!patient) {
+        req.flash('error', 'Cannot find patient!');
+        return res.redirect('/patients');
+    }
+
+    // Check if the logged-in user is the same as the patient's owner
+    if (patient.user.toString() !== req.user._id.toString()) {
+        req.flash('error', 'You do not have permission to delete this patient!');
+        return res.redirect(`/patients/${patient._id}`);
+    }
+
     req.flash('success', 'Successfully deleted patient!');
     res.redirect('/patients');
 }));

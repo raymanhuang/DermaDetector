@@ -65,7 +65,7 @@ app.use((req, res, next) => {
     next();
 })
 
-
+app.use('/users', users)
 app.use('/patients', patients);
 
 app.get('/', (req, res) => {
@@ -74,6 +74,7 @@ app.get('/', (req, res) => {
 
 
 app.all('*', (req, res, next) => {
+    console.log(`Path ${req.path} not found`);
     next(new ExpressError('Page Not Found', 404))
 })
 
