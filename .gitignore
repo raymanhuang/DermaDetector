@@ -1,6 +1,7 @@
 # Node specific
 node_modules/
 npm-debug.log
+/.env/
 
 # Python specific
 __pycache__/
