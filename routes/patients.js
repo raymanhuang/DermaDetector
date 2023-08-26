@@ -4,6 +4,24 @@ const catchAsync = require('../utils/catchAsync')
 const { patientSchema } = require('../schemas');
 const { isLoggedIn } = require('../middleware')
 
+const cloudinary = require('cloudinary').v2;
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
+
+cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_KEY,
+    api_secret: process.env.CLOUDINARY_SECRET
+})
+
+const storage = new CloudinaryStorage({
+    cloudinary,
+    params: {
+        folder: 'DermaDetector',
+        allowedFormats: ['jpeg', 'png', 'jpg']
+    }
+})
+
+
 const ExpressError = require('../utils/ExpressError')
 const Campground = require('../models/patient')
 const validatePatient = (req, res, next) => {
@@ -24,19 +42,14 @@ const FormData = require("form-data");
 const fs = require("fs");
 const axios = require("axios");
 
-const storage = multer.diskStorage({
-    destination: function(req, file, cb){
-        cb(null, './uploads/');
-    },
-    filename: function(req, file, cb){
-        cb(null, Date.now() + '-' + file.originalname);
-    }
-});
-
 const upload = multer({storage: storage});
 
 router.get('/', catchAsync (async(req, res) => {
-    const patients = await Patient.find({user: req.user_id})
+    console.log("User ID:", req.user._id); // or req.user_id if that is actually the correct field
+    console.log('Is authenticated:', req.isAuthenticated());
+    console.log('User:', req.user);
+    const patients = await Patient.find({user: req.user._id})
+    console.log("Patients:", patients);
     res.render('patients/index', { patients })
 }));
 
@@ -47,6 +60,7 @@ router.get('/new', isLoggedIn, (req, res) => {
 router.post('/', isLoggedIn, upload.single('patient[image]'), validatePatient, catchAsync(async (req, res) => {
     try {
         const patientData = req.body.patient;
+        patientData.user = req.user._id;
         if (req.file) {
             patientData.image = req.file.path;
         } else if (!patientData.image) {
@@ -64,9 +78,13 @@ router.post('/', isLoggedIn, upload.single('patient[image]'), validatePatient, c
 
 router.get('/:id', catchAsync(async (req, res) => {
     const patient = await Patient.findById(req.params.id)
-    if(!patient || patient.user.toString() !== req.user._id.toString()){
-        req.flash('error', 'Cannot find patient!');
-        return res.redirect('/patients')
+    console.log("Patient:", patient);
+    console.log("User:", req.user);
+    console.log(typeof patient.user, patient.user);
+    console.log(typeof req.user._id, req.user._id);
+    if(!patient || !req.user || patient.user.toString() !== req.user._id.toString()) {
+        req.flash('error', 'Cannot find patient or you are not authorized!');
+        return res.redirect('/patients');
     }
     res.render('patients/show', { patient });
 }));
