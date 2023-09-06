@@ -6,8 +6,55 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Home</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css"
+          integrity="sha384-r4NyP46KrjDleawBgD5tp8Y7UzmLA05oM1iAEQ17CSuDqnUK2+k9luXQOfXJCJ4I" crossorigin="anonymous">
+    <link rel="stylesheet" href="/stylesheets/home.css">
 </head>
-<body>
-    <h1>Home of Skin Disease Classifier</h1>
+<body class="d-flex text-center text-white bg-dark">
+<div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
+    <header class="mb-auto">
+        <div>
+            <h3 class="float-md-left mb-0">DermaDetector</h3>
+            <nav class="nav nav-masthead justify-content-center float-md-right">
+                <a href="#" class="nav-link active">Home</a>
+                <a href="/patients" class="nav-link">Patients</a>
+                <% if(!currentUser){ %>
+                    <a href="/login" class="nav-link">Login</a>
+                    <a href="/register" class="nav-link">Register</a>
+                <% } else { %>
+                    <a href="/logout" class="nav-link">Logout</a>
+                <% } %>
+            </nav>
+        </div>
+    </header>
+    <main class="px-3">
+        <h1>DermaDetector</h1>
+        <p class="lead">
+            Welcome to DermaDetector<br> Lorem ipsum dolor sit amet consectetur adipisicing elit. Architecto maiores
+            voluptatibus unde temporibus, velit
+            harum vitae nesciunt eum, alias quaerat vel, impedit itaque optio ratione tempore. Quam assumenda debitis
+            error. Lorem ipsum dolor sit amet consectetur adipisicing elit. Architecto maiores voluptatibus unde
+            temporibus, velit
+            harum vitae nesciunt eum, alias quaerat vel, impedit itaque optio ratione tempore. Quam assumenda debitis
+            error. Lorem ipsum dolor sit amet consectetur adipisicing elit. Architecto maiores voluptatibus unde
+            temporibus, velit
+            harum vitae nesciunt eum, alias quaerat vel, impedit itaque optio ratione tempore. Quam assumenda debitis
+            error.
+        </p>
+        <a href="/patients" class="btn btn-lg btn-secondary font-weight-bold bg-white">View Patients</a>
+    </main>
+
+    <footer class="mt-auto text-white-50">
+        <p>&copy; 2023 DermaDetector</p>
+    </footer>
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.min.js"
+        integrity="sha384-oesi62hOLfzrys4LxRF63OJCXdXDipiYWBnvTl9Y9/TRlw5xlKIEHpNyvvDShgf/"
+        crossorigin="anonymous"></script>
 </body>
 </html>
