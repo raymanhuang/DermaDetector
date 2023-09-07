@@ -1,4 +1,6 @@
 from flask import Flask, request, jsonify
+import requests
+from io import BytesIO
 import torch
 import torchvision.transforms as transforms
 import torch.nn as nn
@@ -18,9 +20,22 @@ model.eval()
 
 @app.route('/predict', methods=['POST'])
 def predict():
-    image = Image.open(request.files['image'])
+    print("Received:", request.json, request.files, request.form)
+    # Handle image received as a file
+    if 'image' in request.files:
+        img_file = request.files['image']
+        img_data = BytesIO(img_file.read())
+    elif request.json and 'image_url' in request.json:
+        image_url = request.json['image_url']
+        response = requests.get(image_url)
+        img_data = BytesIO(response.content)
+    else:
+        return jsonify({"error": "No image provided"}), 400
+
+    # Continue with the prediction
+    image = Image.open(img_data)
     transform = transforms.Compose([
-        transforms.Resize(size=(224,224)),
+        transforms.Resize(size=(224, 224)),
         transforms.ToTensor()
     ])
     image_tensor = transform(image).float().unsqueeze(0)

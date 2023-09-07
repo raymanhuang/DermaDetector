@@ -143,16 +143,15 @@ router.delete('/:id', isLoggedIn, catchAsync(async (req, res) => {
 router.post('/:id/diagnose', isLoggedIn, upload.single('image'), catchAsync(async (req, res) => {
     const { id } = req.params;
     const imagePath = req.file.path;
+    console.log(`Sending image path: ${imagePath}`);
 
-    const form_data = new FormData();
-    form_data.append('image', fs.createReadStream(imagePath))
+    const payload = {
+        image_url: imagePath
+    };
 
     try {
-        const response = await axios.post('http://127.0.0.1:5000/predict', form_data, {
-            headers: {
-                ...form_data.getHeaders()
-            }
-        });
+        const response = await axios.post('http://127.0.0.1:5000/predict', payload);
+        console.log('Response from Flask: ', response);
         const prediction = response.data.prediction;
 
         await Patient.findByIdAndUpdate(id, {

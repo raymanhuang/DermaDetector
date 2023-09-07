@@ -48,11 +48,7 @@
 <div class="row">
     <div class="col-6 offset-3">
         <div class="card mb-3">
-            <% if (patient.image.includes('\\')) { %>
-                <img class="m-3" style="width: 100px; height: 100px; object-fit: cover; border-radius: 50%;" src="/<%= patient.image.replace(/\\/g, '/') %>" alt="">
-            <% } else { %>
-                <img style="width: 100px; height: 100px; object-fit: cover; border-radius: 50%;" src="<%= patient.image %>" alt="">
-            <% } %>
+            <img class="m-3" style="width: 100px; height: 100px; object-fit: cover; border-radius: 50%;" src="<%= patient.image %>" alt="">
             <div class="card-body">
                 <h2 class="card-title"><%=patient.name%></h2>
                 <p class="card-text"><%=patient.age%>, <%=patient.gender%></p>
@@ -61,7 +57,7 @@
                 <h2 class="card-title">Diagnosis History</h2>
                 <%  for(let record of patient.diagnosisHistory) { %>
                 <li>
-                    <img src="/<%= record.image.replace(/\\/g, '/') %>" alt="Diagnosis Image" width="100">
+                    <img src="<%= record.image %>" alt="Diagnosis Image" width="100">
                     <p>Prediction: <%=record.prediction%></p>
                 </li>
                 <% } %>
