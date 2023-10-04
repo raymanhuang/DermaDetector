@@ -21,6 +21,15 @@ const passport = require('passport')
 const LocalStrategy = require('passport-local')
 const User = require('./models/user')
 
+const MongoStore = require('connect-mongo');
+const store = new MongoStore({
+    mongoUrl: dbUrl,
+    crypto: {
+        secret: 'secret'
+    },
+    touchAfter: 24 * 60 * 60
+});
+
 const users = require('./routes/users')
 const patients = require('./routes/patients')
 main().catch(err => console.log(err))
