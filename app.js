@@ -22,6 +22,7 @@ const LocalStrategy = require('passport-local')
 const User = require('./models/user')
 
 const MongoStore = require('connect-mongo');
+const dbUrl = process.env.DB_URL
 const store = new MongoStore({
     mongoUrl: dbUrl,
     crypto: {
@@ -34,10 +35,9 @@ const users = require('./routes/users')
 const patients = require('./routes/patients')
 main().catch(err => console.log(err))
 async function main() {
-    await mongoose.connect('mongodb://127.0.0.1:27017/skin-diseases');
+    await mongoose.connect(dbUrl);
     console.log("database connected")
 }
-
 
 const app = express()
 
